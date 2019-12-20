@@ -1,0 +1,16 @@
+version: '2'
+services:
+  schoolbaby-mongodb:
+    image: mongo:4.0.13
+    ports:
+      - '27017:27017'
+    command: mongos --configdb schoolbaby-mongodb-config
+  schoolbaby-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  schoolbaby-mongodb-config:
+    image: mongo:4.0.13
+    container_name: schoolbaby-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
